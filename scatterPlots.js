@@ -1,3 +1,4 @@
+// Gets the mean grade for every assignment and creates an array of all the mean grades.
 var getMeanGrade = function(entries)
 {
     return d3.mean(entries,function(entry)
@@ -6,18 +7,23 @@ var getMeanGrade = function(entries)
         })
 }
 
-
+/*// draws the scatter plot
 var drawScatter = function(students,target,
               xScale,yScale,xProp,yProp)
 {
 
+    // Sets title to be corrected for graph shown.
     setBanner(xProp.toUpperCase() +" vs "+ yProp.toUpperCase());
     
+    
+    //Creates circles as the datapoint in scatterplot.
     d3.select(target).select(".graph")
     .selectAll("circle")
     .data(students)
     .enter()
     .append("circle")
+    
+    // Assigns x and y values using getMean grade Function. Putting in xProp and yProp for various types of assignments for each student.
     .attr("cx",function(student)
     {
         return xScale(getMeanGrade(student[xProp]));    
@@ -26,9 +32,40 @@ var drawScatter = function(students,target,
     {
         return yScale(getMeanGrade(student[yProp]));    
     })
-    .attr("r",4);
+    .attr("r",4);*/
+/*}*/
+
+var drawScatter = function(students,target,xScale,yScale,xProp,yProp)
+
+{
+setBanner(xProp.toUpperCase() +" vs "+ yProp.toUpperCase());   
+    
+var circles = d3.select("#scatter svg")
+.selectAll("circle")
+.data(students)
+circles.enter()
+  .append("circle");
+circles.exit()
+  .remove();
+
+d3.select("#scatter svg")
+.select(".graph")
+.selectAll("circle")
+.transition()
+.attr("cx", function(student)
+{
+return xScale(getMeanGrade(student[xProp]));    
+})
+.attr("cy",function(student)
+    {
+return yScale(getMeanGrade(student[yProp]));    
+    })
+.attr("r",4)
+.attr("fill", "green")
 }
 
+
+// Removes plot points on scatterplot. Targets all circle elements.
 var clearScatter = function(target)
 {
     d3.select(target)
@@ -37,7 +74,7 @@ var clearScatter = function(target)
         .remove();
 }
 
-
+// Creates the axes for the graph. Sets the sclae for each axis and appends axis as groups and tranforms it to be in the right place.
 var createAxes = function(screen,margins,graph,
                            target,xScale,yScale)
 {
@@ -56,7 +93,7 @@ var createAxes = function(screen,margins,graph,
         .call(yAxis)
 }
 
-
+// initiates the formation of the grpah within the gievn cell.
 var initGraph = function(target,students)
 {
     //the size of the screen
@@ -108,13 +145,14 @@ var initGraph = function(target,students)
 
 }
 
+
+//Clears and adds data using the buttoms created in html using the click function. Each button draws the data with different types of assignments as the x and y values.
 var initButtons = function(students,target,xScale,yScale)
 {
     
     d3.select("#fvh")
     .on("click",function()
     {
-        clearScatter(target);
         drawScatter(students,target,
               xScale,yScale,"final","homework");
     })
@@ -122,7 +160,6 @@ var initButtons = function(students,target,xScale,yScale)
     d3.select("#hvq")
     .on("click",function()
     {
-        clearScatter(target);
         drawScatter(students,target,
               xScale,yScale,"homework","test");
     })
@@ -130,7 +167,6 @@ var initButtons = function(students,target,xScale,yScale)
     d3.select("#tvf")
     .on("click",function()
     {
-        clearScatter(target);
         drawScatter(students,target,
               xScale,yScale,"test","final");
     })
@@ -138,7 +174,6 @@ var initButtons = function(students,target,xScale,yScale)
     d3.select("#tvq")
     .on("click",function()
     {
-        clearScatter(target);
         drawScatter(students,target,
               xScale,yScale,"test","quizes");
     })
@@ -147,6 +182,7 @@ var initButtons = function(students,target,xScale,yScale)
     
 }
 
+// Creates the function to change the title of the page.
 var setBanner = function(msg)
 {
     d3.select("#banner")
@@ -155,7 +191,7 @@ var setBanner = function(msg)
 }
 
 
-
+// Pulls the assignment data from the classData. json file.
 var penguinPromise = d3.json("/classData.json");
 
 penguinPromise.then(function(penguins)

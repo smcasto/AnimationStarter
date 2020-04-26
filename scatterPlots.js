@@ -49,7 +49,7 @@ circles.exit()
   .remove();
 
 d3.select("#scatter svg")
-.select(".graph")
+.select(g)
 .selectAll("circle")
 .transition()
 .attr("cx", function(student)
@@ -192,7 +192,7 @@ var setBanner = function(msg)
 
 
 // Pulls the assignment data from the classData. json file.
-var penguinPromise = d3.json("/classData.json");
+var penguinPromise = d3.json("classData.json");
 
 penguinPromise.then(function(penguins)
 {

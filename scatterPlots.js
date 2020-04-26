@@ -40,7 +40,8 @@ var drawScatter = function(students,target,xScale,yScale,xProp,yProp)
 {
 setBanner(xProp.toUpperCase() +" vs "+ yProp.toUpperCase());   
     
-var circles = d3.select("#scatter svg")
+console.log(students)   
+var circles = d3.select("#scatter .graph")
 .selectAll("circle")
 .data(students)
 circles.enter()
@@ -48,10 +49,11 @@ circles.enter()
 circles.exit()
   .remove();
 
-d3.select("#scatter svg")
-.select(g)
+d3.select("#scatter")
+.select("g.graph")
 .selectAll("circle")
 .transition()
+.duration(700)
 .attr("cx", function(student)
 {
 return xScale(getMeanGrade(student[xProp]));    
